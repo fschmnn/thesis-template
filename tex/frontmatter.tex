@@ -1,0 +1,98 @@
+%--------------------------------------------------------------
+% titlepage
+%--------------------------------------------------------------
+
+\pagenumbering{Roman}			
+\thispagestyle{empty}	
+
+\KOMAoptions{twoside = false}
+
+\begin{titlepage}
+\begin{center}
+
+{\Large\lsstyle\scshape department of physics and astronomy \\[0.3cm]
+heidelberg university}
+
+\vfill
+
+\normalsize
+Thesis in Astronomy\\
+submitted by\\[0.5cm]
+Fabian \textsc{scheuermann}\\
+born in Buchen (Odenwald) \\[0.5cm]
+March 2019 \\[0.5cm]
+
+\newpage
+\hfill
+\thispagestyle{empty}
+
+\newpage
+\thispagestyle{empty}
+
+% horizontal rules must be stretched because title is larger than textwidth
+\centerline{\rule{1.\linewidth}{0.2mm}}
+\vspace{5mm}
+\makebox[\textwidth][c]{\Large\lsstyle\scshape Thesis title}\\
+\vspace{3mm}
+\centerline{\rule{1.\linewidth}{0.2mm}}
+
+\vfill
+
+\normalsize
+This Thesis has been carried out by \\
+Fabian \textsc{scheuermann} \\[0.3cm] 
+at the\\
+Zentrum für Astronomie der Universität Heidelberg,\\
+Astronomisches Rechen-Institut \\ [0.3cm]
+under the supervision of \\
+Dr. Kathryn \textsc{kreckel}
+
+\end{center}
+
+\end{titlepage}
+
+\KOMAoptions{twoside = true}
+
+
+%--------------------------------------------------------------
+% abstract
+%--------------------------------------------------------------
+
+\pagestyle{plain.scrheadings}	
+\pagenumbering{roman}
+\setcounter{page}{1}		
+\cleardoublepage
+%https://plg.uwaterloo.ca/~migod/research/beckOOPSLA.html
+\begin{center}
+\parbox{0.95\textwidth}{
+{\large\scshape\lsstyle\lowercase{Abstract}}\\ \vspace{-0.3cm} 
+\HRule \\[0.4cm]
+A short summary of this thesis.\\[1cm]
+
+
+\begin{otherlanguage}{ngerman}
+{\large\scshape\lsstyle\lowercase{Zusammenfassung}}\\ \vspace{-0.3cm}
+\HRule \\[0.4cm]
+Eine kurze Zusammenfassung dieser Arbeit
+\end{otherlanguage}}
+\end{center}
+
+%--------------------------------------------------------------
+% toc, lof, lot, loa
+%--------------------------------------------------------------
+
+\tableofcontents
+\listoffigures
+%\vspace{5em}
+\begingroup
+\let\clearpage\relax
+%\let\newpage\relax
+\listoftables
+\printglossary[style=mylong,type=\acronymtype,title={list of abbreviations}]
+\endgroup
+
+% reset style to default style for the main content
+\cleardoublepage
+\pagenumbering{arabic}			
+\pagestyle{scrheadings}				
+\setcounter{page}{1}			
