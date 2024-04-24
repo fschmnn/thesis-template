@@ -1,0 +1,50 @@
+% abbreviation must be lowercase to use small caps
+% \newacronym[description=description in LoA]{label}{abbreviation}{description in text}
+%
+% \glsadd{label}           add an entry to the list of abbreviations
+% \glspl{label}            print the plural version
+% \glslink{label}{text}    print text and link to label
+% \glsaccesslong{label}    print long text for label (without link)
+% \glsaccessshort{label}   print short text for label (without link)
+%
+% uppercase commands print the uppercase version
+
+
+% ----------------- objects -------------------------------------------
+
+\newabbreviation[
+    description=Interstellar Medium,
+    sort=interstellar
+    ]{ism}{\textsc{ism}}{interstellar medium}
+
+\newabbreviation[
+    description=Integral field unit,
+    sort=integral
+    ]{ifu}{\textsc{ifu}}{integral field unit}
+   
+\newabbreviation[
+    sort=verylarge
+    ]{vlt}{\textsc{vlt}}{Very Large Telescope}
+    
+\newabbreviation[
+    sort=Multiunitspectro
+    ]{muse}{\textsc{muse}}{Multi Unit Spectroscopic Explorer}
+
+\newabbreviation[
+    sort=hubble
+    ]{hst}{\textit{\textsc{hst}}}{Hubble Space Telescope}
+
+\newabbreviation[
+    sort=jameswebb
+    ]{jwst}{\textit{\textsc{jwst}}}{James Webb Space Telescope}
+    
+\newabbreviation[
+    sort=nationalaeronautics
+    ]{nasa}{\textsc{nasa}}{National Aeronautics and Space Administration}
+
+\newabbreviation[
+    sort=EuropeanSpaceAgency
+    ]{esa}{\textsc{esa}}{European Space Agency}
+
+
+

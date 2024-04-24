@@ -1,5 +1,4 @@
 *.gz
-auxiliary
-img
-data
+auxiliary/
 *.pdf
+*.synctex

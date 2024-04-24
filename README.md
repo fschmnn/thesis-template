@@ -1,8 +1,7 @@
 # Thesis Template
 
-this is a preliminary template for my PhD thesis (already contains some notes).
+This is a preliminary template for my PhD thesis (already contains some notes).
 
-This Project was initialy developed in [Overleaf](https://www.overleaf.com/)
 
 ## Use with VS Code
 
