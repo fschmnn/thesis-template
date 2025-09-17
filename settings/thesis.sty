@@ -1,5 +1,5 @@
 % thesis.sty
-% Copyright (c) 2018 F. Scheuermann
+% Copyright (c) 2018--2025 F. Scheuermann
 %
 %--------------------------------------------------------------
 %
@@ -46,7 +46,10 @@
 %--------------------------------------------------------------
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{thesis}[2023/10/05 Package for my thesis.]
+\ProvidesPackage{thesis}[This is the main style file for my thesis.]
+
+% we need to load this first to pass some options
+\RequirePackage[fleqn]{amsmath}
 
 %--------------------------------------------------------------
 % 1. create options for this package
@@ -58,19 +61,20 @@
 
 \newif\ifdraft
 \draftfalse
-\newif\ifprint
-\printfalse
 \newif\ifnumberbychapter
 \numberbychaptertrue
+\newif\ifprint
+\printfalse
 
+% including the parameter automatically sets it to true
 \pgfkeys{
     thesis/.cd ,
     draft/.default = ,
     draft/.code = \drafttrue ,
-    print/.default = ,
-    print/.code = \printtrue ,
     numberbychapter/.default = ,
-    numberbychapter/.code = \numberbychaptertrue ,    
+    numberbychapter/.code = \numberbychaptertrue ,   
+    print/.default = ,
+    print/.code = \printtrue , 
     style/.initial = thesis,
 }
 
@@ -81,22 +85,28 @@
 % 2. Fonts, encoding and colors
 %--------------------------------------------------------------
 
-% prevent Widows and orphans under all circumstances
+% prevent Widows and orphans
 \clubpenalty = 100000
 \widowpenalty = 200000
 \displaywidowpenalty = 200000
 
 % font package for sans serif
-\RequirePackage{charter}	
+\RequirePackage{charter}
+
+
 % we use kpfonts(similar to Palatino)
 \RequirePackage[
     oldstylenums,
+    oldstylemath,
     oldstyle,
     largesmallcaps,
+    nowarning,
     easyscsl,
     uprightgreeks
-    ]{kpfonts}
+]{kpfonts}
 
+% for a nice ampersand symbol
+\newcommand{\ampersand}{{\normalfont\textit{\&}\ }} 
 
 %\RequirePackage[euler-digits]{eulervm}
 %\linespread{1.07}        % increaes Durchschuss
@@ -104,18 +114,18 @@
 % language/hyphenation
 \RequirePackage[ngerman,english]{babel}   
 % hyphenation words with a dash (use \-/)
-\usepackage[shortcuts]{extdash}
+\RequirePackage[shortcuts]{extdash}
 
 % for microtypographie (e.g. adjust spacing in small caps)
 % http://www.khirevich.com/latex/microtype/
-\usepackage[ 
-  activate={true,nocompatibility},
-  final,
-  %kerning=true,
-  factor=1100,
-  stretch=10,
-  shrink=10,
-  letterspace=80,
+\RequirePackage[ 
+    activate={true,nocompatibility},
+    final,
+    %kerning=true,
+    factor=1100,
+    stretch=10,
+    shrink=10,
+    letterspace=80,
 ]{microtype}
 
 % kpfonts is not supported tracking. Therefor I manually inserted
@@ -126,46 +136,61 @@
 \KOMAoptions{DIV=9}   % recalculate Satzspiegel with new font
 
 % encoding
-\RequirePackage[utf8]{inputenc} 	% letters with accents
-\RequirePackage[T1]{fontenc} 			% Use 8-bit encoding 
+\RequirePackage[utf8]{inputenc}    % letters with accents
+\RequirePackage[T1]{fontenc}       % Use 8-bit encoding 
 
 % colors
-\RequirePackage[table]{xcolor} 			% specifying colors 
+\RequirePackage[table]{xcolor}    % specifying colors 
 
-% some nice colors
+% the new Tableau 10 colors based on
+% https://www.tableau.com/blog/colors-upgrade-tableau-10-56782
 \definecolor{tabblue}{RGB}{78, 121, 167}
-\definecolor{tabgreen}{RGB}{89, 161, 78}
+\definecolor{taborange}{RGB}{242, 142, 43}
 \definecolor{tabred}{RGB}{225, 87, 89}
-    
+\definecolor{tabcyan}{RGB}{118, 183, 178}
+\definecolor{tabgreen}{RGB}{89, 161, 78}
+\definecolor{tabyellow}{RGB}{237, 201, 73}
+\definecolor{tabpurple}{RGB}{176, 122, 162}
+\definecolor{tabpink}{RGB}{255, 157, 167}
+\definecolor{tabbrown}{RGB}{156, 117, 95}
+\definecolor{tabgray}{RGB}{192, 192, 192}     % not part of new tableau colors
+\definecolor{orcid}{HTML}{A6CE39}             % the the ORCID links
+
+
 % some packages redefine this, so we need this extra command
 \AtBeginDocument{
-% select which colors to use (for print or digital)
-\colorlet{maincolor}{tabred}
-\ifprint
-  \colorlet{accentcolor}{gray}
-  \colorlet{linkcolor}{black}
-  \colorlet{citecolor}{black}
-  \colorlet{urlcolor}{black}
-  \colorlet{journalcolor}{black}
-  \colorlet{volumnecolor}{black}
-\else 
-  \colorlet{accentcolor}{gray}
-  \colorlet{linkcolor}{tabblue}
-  \colorlet{citecolor}{tabgreen}
-  \colorlet{urlcolor}{tabred}
-  \colorlet{journalcolor}{tabblue}
-  \colorlet{volumnecolor}{tabred}
-\fi
+    % select which colors to use (for print or digital)
+    \ifprint
+        \colorlet{maincolor}{tabred}
+        \colorlet{headercolor}{tabgray}
+        \colorlet{accentcolor}{gray}
+        \colorlet{linkcolor}{black}
+        \colorlet{citecolor}{black}
+        \colorlet{urlcolor}{black}
+        \colorlet{journalcolor}{black}
+        \colorlet{volumnecolor}{black}
+        \colorlet{orcidcolor}{orcid}
+    \else 
+        \colorlet{maincolor}{tabred}
+        \colorlet{headercolor}{tabgray}
+        \colorlet{accentcolor}{gray}
+        \colorlet{linkcolor}{tabblue}
+        \colorlet{citecolor}{tabgreen}
+        \colorlet{urlcolor}{tabred}
+        \colorlet{journalcolor}{tabblue}
+        \colorlet{volumnecolor}{tabred}
+        \colorlet{orcidcolor}{orcid}
+    \fi
 }
 
 % taken from classic thesis 
 \def\graffito@setup{%
 %   \slshape\footnotesize% this was due to \slhape in above book
-   \itshape\footnotesize\leavevmode\color{black}%
-   \parindent=0pt \lineskip=0pt \lineskiplimit=0pt %
-   \tolerance=2000 \hyphenpenalty=300 \exhyphenpenalty=300%
-   \doublehyphendemerits=100000%
-   \finalhyphendemerits=\doublehyphendemerits}
+    \itshape\footnotesize\leavevmode\color{black}%
+    \parindent=0pt \lineskip=0pt \lineskiplimit=0pt %
+    \tolerance=2000 \hyphenpenalty=300 \exhyphenpenalty=300%
+    \doublehyphendemerits=100000%
+    \finalhyphendemerits=\doublehyphendemerits}
 %\DeclareRobustCommand{\graffito}[1]{\marginpar%
 % [\graffito@setup\raggedleft\hspace{0pt}{#1}]%
 % {\graffito@setup\raggedright\hspace{0pt}{#1}}}
@@ -193,11 +218,14 @@
 \setkomafont{subsection}{\large\itshape}
 \setkomafont{disposition}{\rmfamily\normalfont}
 
-% change the chapter heading
+% use the AMS Euler family for the number in the chapter heading
 % https://tex.stackexchange.com/a/330280
 \DeclareMathAlphabet\EuRoman{U}{eur}{m}{n}
 \SetMathAlphabet\EuRoman{bold}{U}{eur}{b}{n}
 \newcommand{\eurom}{\EuRoman}
+
+% horizontal line in header (only used in the abstract
+\newcommand{\HRule}{\rule{\linewidth}{.4pt}}
 
 % put the chapter number at the right side
 \makeatletter
@@ -228,13 +256,16 @@
 }
 \makeatother
 
-% use a dropped captial at the beginning of each chapter
-\usepackage{pgfornament}
-\usetikzlibrary{shapes.geometric,calc}
-\usepackage{lettrine}
-%\renewcommand{\LettrineTextFont}{\normalfont}
-\renewcommand{\LettrineFontHook}{\color{accentcolor}}
+% space above new chapter
+\renewcommand*{\chapterheadstartvskip}{\vspace*{0\baselineskip}}
 
+% ornaments for decoration
+\RequirePackage{pgfornament}
+\usetikzlibrary{shapes.geometric,calc,svg.path}
+
+% use a dropped captial at the beginning of each chapter
+\RequirePackage{lettrine}
+\renewcommand{\LettrineFontHook}{\color{accentcolor}}
 
 \RequirePackage{flushend} % balance columns on last page
 
@@ -242,74 +273,77 @@
 % 4. table of contents and LOF,LOT,LOA
 %--------------------------------------------------------------
 
-\newcommand\gobble[1]{}% <- added
+% used below for ???
+\newcommand\gobble[1]{}
 \newcommand\tocpageseparator{\footnotesize\,\mbox{---}\,}
-\newcommand\tocpagenumberbox[1]{\mbox{#1}}% <- added
+\newcommand\tocpagenumberbox[1]{\mbox{#1}}
 
 \RequirePackage{tocbasic}[2016/05/10]
 \setcounter{tocdepth}{2}
 
-\RedeclareSectionCommand[%
-  innerskip=0.2cm,
-  tocpagenumberbox=\gobble% <- added
+\RedeclareSectionCommand[
+    innerskip=0.2cm,
+    tocpagenumberbox=\gobble
 ]{part}
 
-\DeclareTOCStyleEntry[%
-  beforeskip=1.2em,
-  indent=0cm,
-  numwidth=0.6cm,
-  entryformat=\color{maincolor}\lsstyle\scshape\lowercase%
+\DeclareTOCStyleEntry[
+    beforeskip=0.9em,
+    indent=0cm,
+    numwidth=0.6cm,
+    entryformat=\color{maincolor}\lsstyle\scshape\lowercase
 ]{tocline}{part}
-\DeclareTOCStyleEntry[%
-  beforeskip=0.4em,
-  indent=0cm,
-  numwidth=0.6cm,
-  linefill=\enspace,%
-  raggedpagenumber,%
-  pagenumberformat=\normalsize,%
-  entryformat=\scshape\lowercase%
+
+\DeclareTOCStyleEntry[
+    beforeskip=0.1em,
+    indent=0cm,
+    numwidth=0.6cm,
+    linefill=\enspace,
+    raggedpagenumber,
+    pagenumberformat=\normalsize,
+    entryformat=\scshape\lowercase
 ]{tocline}{chapter}
-\DeclareTOCStyleEntry[%
-  indent=0.6cm,
-  linefill=\enspace,%
-  raggedpagenumber,%
-  pagenumberformat=\small%
+
+\DeclareTOCStyleEntry[
+    indent=0.6cm,
+    linefill=\enspace,
+    raggedpagenumber,
+    pagenumberformat=\small
 ]{tocline}{section}
-\DeclareTOCStyleEntry[%
-  linefill=\enspace,%
-  raggedpagenumber,%
-  pagenumberformat=\small%
+
+\DeclareTOCStyleEntry[
+    linefill=\enspace,
+    raggedpagenumber,
+    pagenumberformat=\small
 ]{tocline}{subsection}
+
 
 % apply the same style to LOF and LOT
 \DeclareTOCStyleEntry[
-  entrynumberformat=Figure\;,
-  numwidth=6.5em,
-  indent=0cm,
-  linefill=\enspace,%
-  raggedpagenumber,%
-  pagenumberformat=\normalsize,%
-  %entryformat=\scshape\lowercase%
+    entrynumberformat=Figure\;,
+    numwidth=6.5em,
+    indent=0cm,
+    linefill=\enspace,
+    raggedpagenumber,
+    pagenumberformat=\normalsize,
+    %entryformat=\scshape\lowercase
 ]{tocline}{figure}
+
 \DeclareTOCStyleEntry[
-  entrynumberformat=Table\;,
-  numwidth=6.5em,
-  indent=0cm,
-  linefill=\enspace,%
-  raggedpagenumber,%
-  pagenumberformat=\normalsize,%
-  %entryformat=\scshape\lowercase%
+    entrynumberformat=Table\;,
+    numwidth=6.5em,
+    indent=0cm,
+    linefill=\enspace,
+    raggedpagenumber,
+    pagenumberformat=\normalsize,
+    %entryformat=\scshape\lowercase
 ]{tocline}{table}
 
 % entries in LOF/LOT are not grouped by chapter
 %\KOMAoptions{listof=nochaptergap}
 
-% change title of toc at begin (babel redefines it there)
-\AtBeginDocument{
-\renewcommand{\contentsname}{contents}
-\renewcommand{\listfigurename}{list of figures}
-\renewcommand{\listtablename}{list of tables}
-}
+\renewcaptionname{english}{\contentsname}{table of contents}
+\renewcaptionname{english}{\listfigurename}{list of figures}
+\renewcaptionname{english}{\listtablename}{list of tables}
 
 
 %--------------------------------------------------------------
@@ -318,11 +352,10 @@
 
 \RequirePackage{scrhack}
 
-% horizontal line in header
-\newcommand{\HRule}{\rule{\linewidth}{0.2mm}}
+\RequirePackage{calc}
 
 % print out the current date
-\usepackage{datetime}
+\RequirePackage{datetime}
 
 \newdateformat{monthyeardate}{%
 \monthname[\THEMONTH], \THEYEAR}
@@ -332,10 +365,11 @@
 \newcommand{\xmark}{$-$}%
 
 % ignore some warning (overleaf can not check this code)
-\usepackage{silence}
+%\usepackage{silence}
 %%begin novalidate
 %\WarningFilter{latex}{Overwriting file}
-\WarningFilter{biblatex}{Delimiter}
+%\WarningFilter{biblatex}{Delimiter}
+%\WarningFilter{biblatex}{sortcites}
 %%end novalidate
 
 %--------------------------------------------------------------
@@ -343,11 +377,10 @@
 %--------------------------------------------------------------
 
 % For math equations, symbols, etc
-% don't include amsthm for theorems
-\RequirePackage[fleqn]{amsmath}
+% we need to load this package at the beginning of the document
+%\RequirePackage[fleqn]{amsmath}
 \setlength\mathindent{15pt}
-
-\RequirePackage{amsfonts,amssymb}    	
+\RequirePackage{amsfonts,amssymb}
 
 % add new functions to amsmath
 \DeclareMathOperator\artanh{artanh}
@@ -367,15 +400,19 @@
 \RequirePackage{siunitx}
 
 \sisetup{%
-    per-mode=reciprocal,
-	exponent-product = \cdot ,
-	inter-unit-product = {\;},
-	range-units = single,
-	separate-uncertainty = true,
+    angle-symbol-over-decimal = true,
+    per-mode = reciprocal,
+    exponent-product = \cdot ,
+    inter-unit-product = {\;},
+    range-units = single,
+    separate-uncertainty = true,
     uncertainty-separator =  {\,}, 
-	multi-part-units=single}
-		 
-% declare custom units (mainly for astronomy)
+    multi-part-units=single
+}
+
+% Percentages should be written per cent, not %, except in tables.
+\DeclareSIUnit{\percent}{per\, cent}
+\DeclareSIUnit{\tablepercent}{\%}
 
 % properties of our stars/planets
 \DeclareSIUnit\Mearth{M_{\oplus}}
@@ -398,40 +435,44 @@
 \DeclareSIUnit\arcmin{arcmin}
 \DeclareSIUnit\mag{mag}
 % other stuff
-\DeclareSIUnit\erg{erg} 				
-\DeclareSIUnit\eV{eV} 	
-\DeclareSIUnit\RA{RA}
-\DeclareSIUnit\DEC{DEC}	
-\DeclareSIUnit\dex{dex}	
+\DeclareSIUnit\erg{erg}
+\DeclareSIUnit\eV{eV}
+\DeclareSIUnit\dex{dex}
+%\DeclareSIUnit\RA{RA}
+%\DeclareSIUnit\DEC{DEC}
+
+
 
 %--------------------------------------------------------------
 % 7. figures, tables, lists and quotes
 %--------------------------------------------------------------
 
-\RequirePackage{graphicx}    	% including pictures
-\RequirePackage{float}      	% fix position of floats  
+\RequirePackage{graphicx}    % including pictures
+%\RequirePackage{svg}         % include svg
+\RequirePackage{float}       % fix position of floats  
+
+%\renewcommand{\textfraction}{0.2}       % allow 10% text on page 
+%\renewcommand{\floatpagefraction}{0.8}  % figure must be huge to be alone
 
 % place figures on single page on top
 \makeatletter
 \setlength{\@fptop}{0pt}
 \makeatother
 
-\graphicspath{{figures/}} 			% the picture directory  
+\graphicspath{{figures/}}    % the picture directory  
 
 \newlength{\figuresize}
 \setlength{\figuresize}{0.7\textwidth} % same width for all images
 
-\RequirePackage{pgf,		    % import plots as pgf
-                pgfplots, 		% create plots in LaTeX
-                tikz} 			% drawing custom shapes
-\pgfplotsset{compat=1.15}       % backwards compatibility mode
+\RequirePackage{pgf}         % import plots as pgf
+\RequirePackage{pgfplots}    % create plots in LaTeX
+\RequirePackage{tikz}        % drawing custom shapes
+\pgfplotsset{compat=1.15}    % backwards compatibility mode
+\def\mathdefault#1{#1}       % matplotlib uses this undefined command
 
+\RequirePackage{pdfpages}    % include PDFs in the document
+\RequirePackage{pdflscape}   % use landscape for large tables/figures
 
-\RequirePackage{pdfpages}       % include PDFs in the document
-\RequirePackage{pdflscape}      % use landscape for large tables/figures
-%\usepackage{rotating}
-%\RequirePackage{newpax}
-%\newpaxsetup{usefileattributes=true}
 
 % if the plot contains a continous colorbar it is saved as a png.
 % because we save all images in an extra folder the path are no longer valid
@@ -451,46 +492,74 @@
 %\renewcommand{\thefigure}{\arabic{figure}}                
 %\renewcommand{\theequation}{\arabic{equation}}                  
 
-% insert ORCID icon with link to to ORCID record
+% insert orcid logo with link. based on
+% https://github.com/duetosymmetry/orcidlink-LaTeX-command
+% this requires the tikzlibrary svg.path (already loaded)
+\tikzset{
+    orcidlogo/.pic={
+        \fill[orcidcolor] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+        \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                     svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                     svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+    }
+}
+
+% the tikz figure is 256 pt high
+% the hight of a letter is \the\fontcharht\font`H = 6.5 pt (A,J,Q differ slightly)
+% we scale it by 6.5 pt / 256 pt = 0.0254 
+% comments are needed to prevent space after command
 \newcommand*{\orcidlink}[1]{%
-    \href{https://orcid.org/#1}{\,\raisebox{0.2em}{%
-        \includegraphics[height=0.6em,width=0.6em]{orcid.png}%
-    }}}
+    \,\raisebox{0.1em}{%
+        \href{https://orcid.org/#1}{%
+            \begin{tikzpicture}[yscale=-0.0254,xscale=0.0254,transform shape]
+                \pic{orcidlogo};
+            \end{tikzpicture}%
+        }%
+    }%
+}
 
 \RequirePackage[
-  font=small,
-  indention=2em,
-  labelfont={sc,color=black},
-  %margin=10pt,
-  hypcap=false]{caption}
+    font=small,
+    indention=2em,
+    %labelfont={sc,color=black},    % {sc,color=black} for small caps
+    %margin=10pt,
+    hypcap=false
+]{caption}
 
 % alternatively: justification=raggedright,format=plain
 % position in KOMA is controled by tablecaptionsabove
 \captionsetup[figure]{
-  name=figure,
-  position=below,               % tell caption where to insert skip
-  justification=justified,      % left aligned
-  singlelinecheck=false,        % even left aligned if only one line
-  format=plain                  % plain or hang 
+    name=Figure,
+    position=below,               % tell caption where to insert skip
+    justification=justified,      % left aligned
+    singlelinecheck=false,        % even left aligned if only one line
+    format=plain                  % plain or hang 
 }
 
 \captionsetup[table]{
-  name=table,
-  position=above,               % tell caption where to insert skip
-  justification=justified,      % left aligned
-  singlelinecheck=false,        % even left aligned if only one line
-  format=plain,                 % plain or hang 
-  belowskip=10pt                % extra space between table and caption
+    name=Table,
+    position=above,               % tell caption where to insert skip
+    justification=justified,      % left aligned
+    singlelinecheck=false,        % even left aligned if only one line
+    format=plain,                 % plain or hang 
+    belowskip=10pt                % extra space between table and caption
 }
 
 \RequirePackage{subcaption}    % for subfigures
 
+\captionsetup[subfigure]{
+    font=footnotesize,
+    labelfont=up,
+    justification=centering 
+}
+
 % tables
-\RequirePackage{booktabs,		% nicer tables
-	            multirow,		% multiple rows in table
-	            array,			% create special columns 	
-	            pgfplotstable,	% read in csv
-	           }        
+\RequirePackage{
+    booktabs,         % nicer tables
+    multirow,         % multiple rows in table
+    array,            % create special columns
+    pgfplotstable,    % read in csv
+}        
 
 \renewcommand{\arraystretch}{1.05} % increase height of tables
 
@@ -498,21 +567,49 @@
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-	
-% lists	    
-\RequirePackage{enumitem} 			% Customize lists
 
-% customize enumerate and itemize
-\setenumerate{noitemsep}             % no space in enumerate        
-\setitemize{noitemsep,               % change style of itemize
-            topsep=5pt,
-            leftmargin=15pt,
-            labelindent=\parindent}
+% lists  
+\RequirePackage{enumitem}    % Customize lists
 
-\RequirePackage{csquotes}
+% change style of itemize
+\setenumerate{
+    noitemsep,
+    label=(\roman*)
+} 
+
+% change style of itemize
+\setitemize{
+    noitemsep,               
+    topsep=5pt,
+    leftmargin=15pt,
+    labelindent=\parindent
+}
+
+% TODO: currently I'm using enquote for everything. I should do it like
+% in the article-template with displayquote and author
+
+\RequirePackage[
+    style=german,
+    german=guillemets
+]{csquotes}
+
+
 %quotation marks in block
 \renewcommand{\mkbegdispquote}[2]{\openautoquote}
 \renewcommand{\mkenddispquote}[2]{\closeautoquote#1#2}
+
+% it may be useful to use » « to open and close a quote
+% https://tex.stackexchange.com/questions/103445/how-to-quote-correctly-with-csquotes
+
+% make the quote italic
+\newenvironment*{innerquote}{\quote\itshape}{\endquote}
+\SetBlockEnvironment{innerquote}
+% put quotation marks around text
+\renewcommand{\mkbegdispquote}[2]{\textooquote}      % or openautoquote??
+\renewcommand{\mkenddispquote}[2]{\textcoquote#1#2}
+% right align the author and add an em-dash
+% https://tex.stackexchange.com/questions/45948/what-is-the-difference-between-hspace-fill-and-hfill
+\renewcommand{\mkcitation}[1]{\newline\small\hspace*{\fill}\normalfont---#1}
 
 % redefine path for input command (used for pgf plots)
 \makeatletter
@@ -525,17 +622,18 @@
 % 8. bibliography and references
 %--------------------------------------------------------------
 
+
 % maxnames: if more authors than is truncated to minnames
 \RequirePackage[
                 backend=biber,          % use biber for the backend
                 backref=false,          % page numbers in bibliography
-                style=biblatex-mnras,   
-                                        % author (year) style
                 hyperref=true,          % link to bibliography
                 natbib=true,            % enable natbib commands
+                style=biblatex-mnras,   % author (year) style
                 ]{biblatex}
 %\DeclareDelimFormat{nameyeardelim}{\addspace}
 \renewcommand*{\entrysetpunct}{, }
+
 
 % use links in \citeyear
 \DeclareCiteCommand{\citeyear}
@@ -552,50 +650,62 @@
 
 % change style of footnotes
 % para puts them all in one line
-\usepackage[perpage]{footmisc}
+\RequirePackage[perpage]{footmisc}
 
 \newcommand*{\remark}[1]{\leavevmode\marginpar{#1}\ignorespaces}
 
-\RequirePackage{hyperref}			% for links and references
+\RequirePackage{hyperref}    % for links and references
 \RequirePackage[
-                noabbrev,
-                nameinlink,
-                capitalise,
-               ]{cleveref} 	  % easier references 
+    noabbrev,
+    nameinlink,
+    capitalise,
+]{cleveref}                  % easier references 
 
-%\crefdefaultlabelformat{#2\textsc{#1}#3}
-\crefformat{figure}{\scshape{figure} #2#1#3}
-\crefformat{table}{\scshape{table} #2#1#3}
-\crefformat{equation}{#2\scshape{equation} #1#3}
-\crefformat{chapter}{#2\scshape{chapter} #1#3}
-\crefformat{section}{#2\scshape{section} #1#3}
-\crefmultiformat{figure}{#2\scshape{figures} #1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
-\crefmultiformat{table}{#2\scshape{tables} #1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
+%#1 stands for the number, #2 for the begining of the link and #3 for the end
+% we use either small caps uper titlecase 
 
-\hypersetup{				      
-	plainpages=false,		    % -
-	linktoc=page,			      %	- 
-	colorlinks=true,		    %	- colorize links?
-	linkcolor={linkcolor},	%	-
-  citecolor={citecolor},  % -
-  urlcolor={urlcolor},		%	-
-	pdfborder={0 0 0},		  % -
-	breaklinks=true,			  %	- allow line break inside links
-	bookmarksnumbered=true,	% -
-	bookmarksopen=true,		  % -
-	bookmarksdepth=2        % -
+%\crefformat{figure}{\scshape{figure} #2#1#3}
+%\crefformat{table}{\scshape{table} #2#1#3}
+%\crefformat{equation}{\scshape{equation} #2#1#3}
+%\crefformat{chapter}{\scshape{chapter} #2#1#3}
+%\crefformat{section}{\scshape{section} #2#1#3}
+%\crefformat{appendix}{\scshape{appendix} #2#1#3}
+%\crefmultiformat{figure}{\scshape{figures} #2#1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
+%\crefmultiformat{table}{\scshape{tables} #2#1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
+
+\crefformat{figure}{Figure #2#1#3}
+\crefformat{table}{Table #2#1#3}
+\crefformat{equation}{Equation #2#1#3}
+\crefformat{chapter}{Chapter #2#1#3}
+\crefformat{section}{Section #2#1#3}
+\crefformat{appendix}{Appendix #2#1#3}
+\crefmultiformat{figure}{Figures #2#1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
+\crefmultiformat{table}{Tables #2#1#3}{ and~#2#1#3}{, #2#1#3}{ and~#2#1#3}
+
+\hypersetup{        
+    plainpages=false,        % -
+    linktoc=page,            % - 
+    colorlinks=true,         % - colorize links?
+    linkcolor={linkcolor},   % -
+    citecolor={citecolor},   % -
+    urlcolor={urlcolor},     % -
+    pdfborder={0 0 0},       % -
+    breaklinks=true,         % - allow line break inside links
+    bookmarksnumbered=true,  % -
+    bookmarksopen=true,      % -
+    bookmarksdepth=2         % -
 }
 
-\usepackage[all]{hypcap} % fix location of links (\ref{})
+\RequirePackage[all]{hypcap} % fix location of links (\ref{})
 
 % create list of abbreviations (LOA)
 % in order to have working hyperlinks, this must be loaded after hyperref
 \RequirePackage{mfirstuc-english}
 \RequirePackage[
     automake,
-    hyperfirst=true,
+    hyperfirst=true,        % the first use also has a link
     nogroupskip,            % don't group entries by initial letter
-    %nonumberlist,           % don't add page number in LOA
+    nonumberlist,           % don't add page number in LOA
     nopostdot,              % don't add . at the end of definition
     shortcuts,              % use shorter commands like \acs{}
     toc=false               % no entry in TOC
@@ -628,32 +738,38 @@
 %       correct. To avoid this it mus be loaded afterwards.
 
 \RequirePackage{scrlayer-scrpage}
-\clearpairofpagestyles			  % remove default header
 
+% remove default header
+\clearpairofpagestyles  
   
-\renewcommand\partmarkformat{}    % remove part number in \headmark
-\renewcommand\chaptermarkformat{} % remove chapter number in \headmark
-\renewcommand\sectionmarkformat{} % remove section number in \headmark
+% remove or change part/chapter/section name and number in \headmark
+\renewcommand\partmarkformat{}     
+\renewcommand\chaptermarkformat{{\normalfont\MakeUppercase Chapter} \thechapter\enskip}   
+\renewcommand\sectionmarkformat{\thesection\enskip}  
 \automark*[section]{chapter}
 
-% if you want lehead instead you must figure out how to put the number on the chapter 
-% page into the footer
-% optional argument sets plain.scrheadings
-\lehead[]{%
-  \makebox[0pt][r]{\makebox{\normalsize\pagemark\quad}}%
-  {\color{darkgray}\normalfont\scshape\MakeLowercase\headmark}
-}
+% create hanging page number
+\lehead[]{\makebox[0pt][r]{\makebox{\normalsize\pagemark\quad}}{\color{headercolor}\normalfont\scshape\MakeLowercase\headmark}}
+\rohead[]{\makebox{\makebox[\textwidth][l]{\hfill\color{headercolor}\normalfont\headmark}{\normalsize\quad\pagemark}}}
 
-\rohead[]{%
-  \makebox{\makebox[\textwidth][l]{\hfill\color{darkgray}\normalfont\headmark}{\normalsize\quad\pagemark}}
-}
-
+% for pages with empty header, the page number is in the footer
 \rofoot[\pagemark]{}
 \lefoot[\pagemark]{}
 
-% add draft mark if draft option is used
-\newcommand{\draftversion}{\normalfont\color{darkgray}\small\vspace{-6.\baselineskip}[\monthyeardate\today\ -- draft version]}
+
 \ifdraft
+  % add draft mark if draft option is used
+  \newcommand{\draftversion}{\normalfont\color{darkgray}\small\vspace{-6.\baselineskip}[\monthyeardate\today\ -- draft version]}
   \cfoot[\draftversion]{\draftversion}
 \fi
+
+
+% this belogns to biblatex, but the $ messes up the syntax highlighting
+\DeclareStyleSourcemap{
+    \maps[datatype=bibtex]{
+      \map{
+        \step[fieldsource=author, match=\regexp{([^,]+),\s+(.).*?\sand}, final]
+        \step[fieldset=sortname, fieldvalue=$1, final]
+          } 
+}}
 

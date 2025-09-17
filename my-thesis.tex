@@ -1,52 +1,58 @@
 % -----------------------------
-% PhD Thesis Fabian Scheuermann
+% thesis template
 % -----------------------------
-%
-\PassOptionsToPackage{fleqn}{amsmath} 
-%\DocumentMetadata{uncompress}
-\documentclass[%
-  paper        = a4,	   	   	% select paper size
-  fontsize     = 10pt,		   	% font size
-  BCOR         =  5mm,		   	% add space for binding
-  twoside      = true,			  % oneside or twoside printing
-  DIV          = calc,		   	% calculate type area
-  headinclude  = false,       % header not part of text area
-  footinclude  = false,       % footer not part of text area
-  footheight   = 0pt,
-  open         = right,	   		% cleardouble ends up right side
-  bibliography = leveldown,   % no pagebreak befor bibliography
-  bibliography = totoc,			  % toc entry for references 
-  numbers      = noenddot		  % no period after numbers (2.1.)
-              ]{scrbook}
 
-\usepackage[%
- draft = false,               % insert [Date, draft version] at bottom of page
- %print = false                % the print version uses more black and white
-           ]{thesis}          
+\documentclass[
+    paper        = a4,         % select paper size
+    fontsize     = 10pt,       % font size
+    BCOR         = 5mm,        % add space for binding
+    twoside      = true,       % oneside or twoside printing
+    DIV          = calc,       % calculate type area
+    headinclude  = false,      % header not part of text area
+    footinclude  = false,      % footer not part of text area
+    footheight   = 13.3pt,     % value from warning when set to 0pt
+    headheight   = 26.5pt,     %
+    open         = right,      % cleardouble ends up right side
+    bibliography = leveldown,  % no pagebreak befor bibliography
+    bibliography = totoc,      % toc entry for references 
+    numbers      = noenddot    % no period after numbers (2.1.)
+]{scrbook}
+
+% Parameters:       (all options are set true if they appear here )
+% -----------
+% draft           : insert [Date, draft version] at bottom of page
+% print           : the print version uses more black and white
+% numberbychapter :
+
+\usepackage{thesis}           % package with main style
 \usepackage{thesis-config}    % package with custom commands
 
-\addbibresource{bibliography.bib}   % references
-\loadglsentries{thesis-glossaries}  % file with abbreviatoins
+\addbibresource{settings/bibliography.bib}   % references
+\loadglsentries{settings/thesis-glossaries}  % file with abbreviatoins
 
 % make bad characters easily visible in the text
 %\DeclareUnicodeCharacter{0301}{***************}
 
 \author{Firstname Lastname}
-\title{Characterising emission line nebulae with phangs}
+\title{The title of this thesis}
 \date{2000.01.01}
 
 \hypersetup{
-  pdfinfo={
-    Title={The title shown in the PDF},
-    Author={The author shown in the PDF},
-    Subject={What is this document about},
-    Keywords={LaTeX, Thesis}
-  }
+    pdfinfo={
+        Title={The title shown in the PDF},
+        Author={The author shown in the PDF},
+        Subject={What is this document about},
+        Keywords={LaTeX, Thesis}
+        }
+    }
+
+% save time by only compiling parts of the document
+\includeonly{
+    content/00frontmatter,
+    content/01main,
+    content/02appendix,
+    content/03backmatter
 }
-
-
-% only compile a single chapters to save time
-%\includeonly{text/01prologue,text/03epilogue}
 
 \linespread{1.1}
 
@@ -56,19 +62,19 @@
 % front matter (titlepage, abstract, toc etc.)
 %--------------------------------------------------------------
 
-\input{text/frontmatter}
+\include{content/00frontmatter}
 
 %--------------------------------------------------------------
 % main matter (each file contains one part)
 %--------------------------------------------------------------	
 
-% include enables us to only compile a single chapter
-\include{text/main}	
+\include{content/01main}	
+\include{content/02appendix}	
 
 %--------------------------------------------------------------
 % back matter (references, statement of authorship etc.)
 %--------------------------------------------------------------
 
-\input{text/backmatter}
+\include{content/03backmatter}
 
 \end{document}

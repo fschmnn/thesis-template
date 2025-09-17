@@ -1,4 +1,5 @@
+.vscode/
+.auxiliary/
+build/
 *.gz
-auxiliary/
-*.pdf
 *.synctex
